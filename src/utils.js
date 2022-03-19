@@ -1,4 +1,4 @@
-const fs =require('fs');
+const fs = require('fs');
 const path = require('path');
 const hx = require('hbuilderx');
 const { spawn, exec } = require('child_process');
@@ -12,7 +12,7 @@ const osName = os.platform();
 function getJarsigner() {
     let cmd = osName == "win32" ? "where jarsigner" : "which jarsigner";
     return new Promise((resolve, reject) => {
-        exec(cmd, function(error, stdout, stderr) {
+        exec(cmd, function (error, stdout, stderr) {
             if (error) {
                 createOutputView("Android签名，需要jarsigner工具。未查找到jarsigner相关工具，请在当前电脑安装JDK。如果当前电脑已安装JDK，请确保已将JDK安装路径加入到环境变量中。", "error");
                 createOutputView("Oracle JDK下载地址：https://www.oracle.com/java/technologies/downloads/", "info");
@@ -29,8 +29,8 @@ function getJarsigner() {
  * @param {String} msgLevel (warning | success | error | info), 控制文本颜色
  * @param {String} linkText 链接文本
  */
-function createOutputView(msg, msgLevel='info', linkText) {
-    let outputView = hx.window.createOutputView({"id":"Android-Apk","title":"Android-Apk"});
+function createOutputView(msg, msgLevel = 'info', linkText) {
+    let outputView = hx.window.createOutputView({ "id": "Android-Apk", "title": "Android-Apk" });
     outputView.show();
 
     if (linkText == undefined || linkText == '') {
@@ -49,22 +49,13 @@ function createOutputView(msg, msgLevel='info', linkText) {
     outputView.appendLine({
         line: msg,
         level: msgLevel,
-        hyperlinks:[
+        hyperlinks: [
             {
                 linkPosition: {
                     start: start,
                     end: start + linkText.length
                 },
-                onOpen: function() {
-                    if (fs.existsSync(linkText)) {
-                        return hx.workspace.openTextDocument(linkText);
-                    };
-                    const file_content = linkText.includes('.ssh/config') ? `#Host github\n#\tHostName github.com\n#\tPreferredAuthentications publickey\n#\tIdentityFile ~/.ssh/<private-key-filename>` : '';
-                    fs.appendFile(linkText, file_content , (error) => {
-                        if (error) {return};
-                        hx.workspace.openTextDocument(linkText);
-                    });
-                }
+                onOpen: function () {}
             }
         ]
     });

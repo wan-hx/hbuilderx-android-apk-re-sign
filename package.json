@@ -11,31 +11,49 @@
     "categories": [
         "Other"
     ],
-    "main": "./extension",
+    "main": "./src/extension",
     "activationEvents": [
         "onCommand:AndroidApkReSign.main"
     ],
     "contributes": {
-        "commands": [{
-            "command": "AndroidApkReSign.main",
-            "title": "Hello World"
-        }],
+        "commands": [
+            {
+                "command": "AndroidApkReSign.main",
+                "title": "Android Apk包签名"
+            }
+        ],
+        "expressions": {
+            "isApk": "...workspaceFolderRelativePath =~ /([a|A][p|P][k|K])$/i"
+        },
+        "keybindings": [
+            {
+                "command": "AndroidApkReSign.main",
+                "key": "Ctrl+Alt+S",
+                "when": "expression.isApk",
+                "macosx": "Command+Alt+S"
+            }
+        ],
         "menus": {
-            "editor/context": [{
+            "explorer/context": [
+                {
                     "command": "AndroidApkReSign.main",
-                    "group": "z_commands",
-                    "when": "editorTextFocus"
+                    "group": "new",
+                    "when": "expression.isApk"
                 },
                 {
-                    "group": "z_commands"
+                    "group": "new"
                 }
             ],
-            "menubar/tool": [{
+            "menubar/tool": [
+                {
                     "group": "ext_settings"
                 },
                 {
                     "command": "AndroidApkReSign.main",
-                    "title": "Android: apk包重签名",
+                    "title": "Android Apk包签名",
+                    "group": "ext_settings"
+                },
+                {
                     "group": "ext_settings"
                 }
             ]
