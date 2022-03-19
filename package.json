@@ -1,0 +1,48 @@
+{
+    "id": "android-apk-re-sign",
+    "name": "Android Apk包重签名",
+    "description": "Android Apk包重签名",
+    "displayName": "Android Apk包重签名",
+    "version": "0.0.1",
+    "publisher": "oneone",
+    "engines": {
+        "HBuilderX": "^2.7.0"
+    },
+    "categories": [
+        "Other"
+    ],
+    "main": "./extension",
+    "activationEvents": [
+        "onCommand:AndroidApkReSign.main"
+    ],
+    "contributes": {
+        "commands": [{
+            "command": "AndroidApkReSign.main",
+            "title": "Hello World"
+        }],
+        "menus": {
+            "editor/context": [{
+                    "command": "AndroidApkReSign.main",
+                    "group": "z_commands",
+                    "when": "editorTextFocus"
+                },
+                {
+                    "group": "z_commands"
+                }
+            ],
+            "menubar/tool": [{
+                    "group": "ext_settings"
+                },
+                {
+                    "command": "AndroidApkReSign.main",
+                    "title": "Android: apk包重签名",
+                    "group": "ext_settings"
+                }
+            ]
+        }
+    },
+    "extensionDependencies": [
+        "plugin-manager"
+    ],
+    "dependencies": {}
+}
