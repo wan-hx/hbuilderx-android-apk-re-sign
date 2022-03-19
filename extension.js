@@ -3,9 +3,9 @@ const hx = require("hbuilderx");
 const reSign = require('./src/main.js')
 
 function activate(context) {
-    
-	let AndroidApkReSign = hx.commands.registerCommand('AndroidApkReSign.main', () => {
-		let sign = new reSign();
+
+	let AndroidApkReSign = hx.commands.registerCommand('AndroidApkReSign.main', (param) => {
+		let sign = new reSign(param);
         sign.main()
 	});
 	context.subscriptions.push(AndroidApkReSign);

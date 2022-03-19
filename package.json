@@ -4,9 +4,9 @@
     "description": "Android Apk包重签名",
     "displayName": "Android Apk包重签名",
     "version": "0.0.1",
-    "publisher": "oneone",
+    "publisher": "xiaohutu",
     "engines": {
-        "HBuilderX": "^2.7.0"
+        "HBuilderX": "^3.2.6"
     },
     "categories": [
         "Other"
