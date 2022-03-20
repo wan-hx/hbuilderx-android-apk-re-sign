@@ -1,8 +1,8 @@
 {
     "id": "android-apk-re-sign",
-    "name": "Android Apk包重签名",
-    "description": "Android Apk包重签名",
-    "displayName": "Android Apk包重签名",
+    "name": "Android Apk包签名",
+    "description": "Android Apk包签名",
+    "displayName": "Android Apk包签名",
     "version": "0.0.1",
     "publisher": "xiaohutu",
     "engines": {

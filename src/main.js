@@ -160,7 +160,7 @@ class reSign {
         let certAlias = this.certInfo.certAlias ? this.certInfo.certAlias : '';
 
         let remark =
-            '<span style="color: #a0a0a0; font-size: 11px;">备注：本插件调用的是java jarsigner命令，请确保本机已安装Java环境。<a href="https://www.oracle.com/java/technologies/downloads/">JDK下载地址</a></span>';
+            '<span style="color: #a0a0a0; font-size: 11px;">备注：本插件调用的是本机java jarsigner命令，请确保本机已安装Java环境。<a href="https://www.oracle.com/java/technologies/downloads/">JDK下载地址</a></span>';
         let footer =
             '<p><a href="https://ext.dcloud.net.cn/plugin?name=android-apk-re-sign">使用教程</a>、<a href="https://ext.dcloud.net.cn/plugin?name=app-certificate-tools">证书生成工具</a></p>';
 
