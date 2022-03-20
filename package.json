@@ -13,12 +13,27 @@
     ],
     "main": "./src/extension",
     "activationEvents": [
-        "onCommand:AndroidApkReSign.main"
+        "onCommand:AndroidApkSign.main"
     ],
     "contributes": {
+        "configuration": {
+            "title": "AndroidApkSign - Android Apk包签名工具配置",
+            "properties": {
+                "AndroidApkSign.jarSignerPath": {
+                    "type": "string",
+                    "default": "",
+                    "description": "JDK jarsigner路径 <a href='https://www.oracle.com/java/technologies/downloads/'>JDK下载地址</a>"
+                },
+                "AndroidApkSign.apkSignerPath": {
+                    "type": "string",
+                    "default": "",
+                    "description": "Android SDK apksigner路径 <a href='https://www.androiddevtools.cn'>Android SDK下载地址</a>"
+                }
+            }
+        },
         "commands": [
             {
-                "command": "AndroidApkReSign.main",
+                "command": "AndroidApkSign.main",
                 "title": "Android Apk包签名"
             }
         ],
@@ -27,7 +42,7 @@
         },
         "keybindings": [
             {
-                "command": "AndroidApkReSign.main",
+                "command": "AndroidApkSign.main",
                 "key": "Ctrl+Alt+S",
                 "when": "expression.isApk",
                 "macosx": "Command+Alt+S"
@@ -36,7 +51,7 @@
         "menus": {
             "explorer/context": [
                 {
-                    "command": "AndroidApkReSign.main",
+                    "command": "AndroidApkSign.main",
                     "group": "new",
                     "when": "expression.isApk"
                 },
@@ -49,7 +64,7 @@
                     "group": "ext_settings"
                 },
                 {
-                    "command": "AndroidApkReSign.main",
+                    "command": "AndroidApkSign.main",
                     "title": "Android Apk包签名",
                     "group": "ext_settings"
                 },

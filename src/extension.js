@@ -4,11 +4,11 @@ const reSign = require('./main.js')
 
 function activate(context) {
 
-    let AndroidApkReSign = hx.commands.registerCommand('AndroidApkReSign.main', (param) => {
+    let AndroidApkSign = hx.commands.registerCommand('AndroidApkSign.main', (param) => {
         let sign = new reSign(param);
         sign.main()
     });
-    context.subscriptions.push(AndroidApkReSign);
+    context.subscriptions.push(AndroidApkSign);
 };
 
 function deactivate() {
