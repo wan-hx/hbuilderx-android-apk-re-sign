@@ -25,21 +25,20 @@ class ApkSign {
         let jarSignerPath = await getPluginsConfig("AndroidApkSign.jarSignerPath");
         if (!jarSignerPath) {
             let check = await getJarsigner();
-            if (check != 'success') return;
+            if (check != 'success') {
+                createOutputView(`HBuilderX 【设置 - 插件配置】，自定义的jarsigner路径无效`, 'error');
+                return;
+            };
         };
 
-        let lastCmd = jarSignerPath ? `"${jarSignerPath}" ${cmd}` : `jarsigner ${cmd}`;
-        let result = await runCmd(lastCmd);
+        // jarSigner工具所在的目录
+        let runDir;
+        if (jarSignerPath) {
+            runDir = path.dirname(jarSignerPath);
+        };
 
-        if (result.includes("无法对 jar 进行签名") && result.includes("java.util.zip.ZipException")) {
-            createOutputView(`原因：你正尝试签署已签名的.apk。你需要导出未签名的.apk文件，然后使用签名jarsigner`, 'error');
-        };
-        if (result.includes("证书链") && result.includes("找不到")) {
-            createOutputView(`可能的原因：Android证书别名无效！`, 'error');
-        };
-        if (result.includes("keystore password was incorrect")) {
-            createOutputView(`原因：Android证书密码无效或错误！`, 'error');
-        };
+        let lastCmd = jarSignerPath ? `${jarSignerPath} ${cmd}` : `jarsigner ${cmd}`;
+        await runCmd(lastCmd, runDir);
     };
 
     async useApkSigner(cmd) {
@@ -47,15 +46,20 @@ class ApkSign {
         let apkSignerPath = await getPluginsConfig("AndroidApkSign.apkSignerPath");
         if (!apkSignerPath) {
             let check = await getApkSigner();
-            if (check != 'success') return;
+            if (check != 'success') {
+                createOutputView(`HBuilderX 【设置 - 插件配置】，自定义的apksigner路径无效`, 'error');
+                return;
+            };
         };
 
-        let lastCmd = apkSignerPath ? `"${apkSignerPath}" ${cmd}` : `apksigner ${cmd}`;
-        let result = await runCmd(lastCmd);
-        
-        if (result == '') {
-            createOutputView(`apksigner对apk包签名成功。`, 'success');
+        // apkSigner工具所在的目录
+        let runDir;
+        if (apkSignerPath) {
+            runDir = path.dirname(apkSignerPath);
         };
+
+        let lastCmd = apkSignerPath ? `${apkSignerPath} ${cmd}` : `apksigner ${cmd}`;
+        await runCmd(lastCmd, runDir);
     };
 
     main(data) {

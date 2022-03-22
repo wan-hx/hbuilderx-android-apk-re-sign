@@ -2,7 +2,6 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const process = require('process');
-const {exec} = require('child_process');
 
 const hx = require('hbuilderx');
 
@@ -99,7 +98,8 @@ class reSign {
      */
     getFormItems(change, formData) {
         const subtitle = '<span style="color: #a0a0a0; font-size: 11px;">jarsigner支持V1签名，apksigner支持v2签名。如果您不了解两者区别，建议选择使用jarsigner对apk进行签名。</span>'
-        const footer = '<p><a href="https://ext.dcloud.net.cn/plugin?name=android-apk-re-sign">使用教程</a>、<a href="https://ext.dcloud.net.cn/plugin?name=app-certificate-tools">证书生成工具</a></p>';
+        const helper = '<p><a href="https://ext.dcloud.net.cn/plugin?name=app-certificate-tools">Android证书生成工具</a>、<a href="https://ext.dcloud.net.cn/plugin?name=android-apk-re-sign">寻求帮助</a></p>';
+        const PlayTour= '<span style="color: #a0a0a0; font-size: 13px;">插件开发不易，请作者喝杯可乐吧 </span><a href="https://ext.dcloud.net.cn/plugin?name=android-apk-re-sign">打赏作者</a>';
 
         let apkSourcePath = this.apkSourcePath ? this.apkSourcePath : "";
         let certPath = this.certInfo.certPath ? this.certInfo.certPath : '';
@@ -121,14 +121,14 @@ class reSign {
             {type: "fileSelectInput",mode: "file",name: "certPath",label: "Android证书文件",placeholder: '必填',value: certPath},
             {type: "input",name: "certPassphrase",label: "Android证书密码",placeholder: "必填",value: certPassphrase},
             {type: "input",name: "certAlias",label: "Android证书别名",placeholder: "必填",value: certAlias},
-            {type: "label",name: "blanLink2",text: ""}
+            {type: "label",name: "text",text: helper }
         ];
         return {
             title: "Android Apk包签名",
             subtitle: subtitle,
             width: 590,
             height: 360,
-            footer: footer,
+            footer: PlayTour,
             formItems: formItems,
         };
     };
