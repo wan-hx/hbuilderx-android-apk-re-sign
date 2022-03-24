@@ -14,6 +14,9 @@ const {
     getJarsigner
 } = require('./utils.js');
 
+
+const osName = os.platform();
+
 /**
  * @description 执行apk_sign
  */
@@ -62,7 +65,32 @@ class ApkSign {
         await runCmd(lastCmd, runDir);
     };
 
-    main(data) {
+    async getApkTargetPath(apkSourcePath, apkTargetPath) {
+        // 解析源apk路径
+        let info = path.parse(apkSourcePath);
+        let {dir, name} = info;
+
+        // 输出的apk文件名
+        let targetFileName = name + '_' + Date.parse(new Date()) + ".apk";
+
+        // 当输出apk路径为空时
+        if (apkTargetPath == "" || !apkTargetPath) {
+            apkTargetPath = path.join(dir, targetFileName);
+        };
+
+        // 当输出apk路径为目录时
+        if (apkTargetPath) {
+            try{
+                let targetStat = fs.statSync(apkTargetPath);
+                if (targetStat.isDirectory()) {
+                    apkTargetPath = path.join(apkTargetPath, targetFileName);
+                };
+            }catch(e){};
+        };
+        return apkTargetPath;
+    };
+
+    async main(data) {
         let {
             certPath,
             certPassphrase,
@@ -72,18 +100,19 @@ class ApkSign {
             tool
         } = data;
 
-        if (apkTargetPath == "" || !apkTargetPath) {
-            let info = path.parse(apkSourcePath);
-            let {dir, name} = info;
-            let targetFileName = name + Date.parse(new Date()) + ".apk"
-            apkTargetPath = path.join(dir, targetFileName);
-        };
+        apkTargetPath = await this.getApkTargetPath(apkSourcePath, apkTargetPath);
 
         if (tool == 'jarsigner') {
             let jarCmd = `-verbose -storepass "${certPassphrase}" -keystore "${certPath}" -signedjar "${apkTargetPath}" "${apkSourcePath}" "${certAlias}"`;
+            if (osName == 'win32') {
+                jarCmd = `-verbose -storepass ${certPassphrase} -keystore ${certPath} -signedjar ${apkTargetPath} ${apkSourcePath} ${certAlias}`;
+            };
             this.useJarSigner(jarCmd);
         } else {
             let cmd = `sign --ks "${certPath}" --ks-pass "pass:${certPassphrase}"  --ks-key-alias "${certAlias}" -out "${apkTargetPath}" "${apkSourcePath}"`;
+            if (osName == 'win32') {
+                jarCmd = `sign --ks "${certPath}" --ks-pass pass:${certPassphrase}  --ks-key-alias ${certAlias} -out ${apkTargetPath} ${apkSourcePath}`;
+            };
             this.useApkSigner(cmd);
         };
     };

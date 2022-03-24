@@ -7,6 +7,7 @@ const hx = require('hbuilderx');
 
 const {
     createOutputView,
+    hxShowMessageBox,
     getJarsigner,
     getApkSigner
 } = require('./utils.js');
@@ -40,6 +41,9 @@ class reSign {
      */
     async checkFileInfo(item, expect) {
         try {
+            let isExist = fs.existsSync(item);
+            if (!isExist) return false;
+
             let stat = fs.statSync(item);
             if (stat.isFile() && expect == "File") {
                 return stat.isFile() ? true : false;
@@ -63,23 +67,23 @@ class reSign {
             let v = formData[s];
             let desc = this.windowsDesc[s];
             if (v.replace(/(^\s*)|(\s*$)/g, "") == '' && s != "apkTargetPath") {
-                errMsg = `${desc}：请检查此项，不允许为空! `
+                errMsg = `${desc}：请检查此项，不允许为空! `;
                 break;
             };
-            if (["apkSourcePath", "certPath"].includes(s) && fs.existsSync(v)) {
+            if (["apkSourcePath", "certPath"].includes(s)) {
                 let check1 = await this.checkFileInfo(v, "File");
                 if (!check1) {
-                    errMsg = `${desc}：不是有效的文件路径, 请重新填写！`
+                    errMsg = `${desc}：不是有效的文件路径, 请重新填写！`;
                 };
             };
             let extname = path.extname(v);
             if (s == "apkSourcePath" && extname != ".apk") {
-                errMsg = `${desc}：必须为文件，且以.apk结尾！`
+                errMsg = `${desc}：必须为文件，且以.apk结尾！`;
             };
             if (s == "apkTargetPath" && extname == ".apk") {
                 let dirName = path.dirname(v);
                 if (!fs.existsSync(dirName)) {
-                    errMsg = `${desc}：${dirName} 目录路径无效`
+                    errMsg = `${desc}：${dirName} 目录路径无效`;
                 };
             };
         };
@@ -88,6 +92,26 @@ class reSign {
             that.showError(errMsg);
             return false;
         };
+
+        if (os.platform() == 'win32') {
+            let errMsg2 = "";
+            for (let item in formData) {
+                if (!verifyItems.includes(item)) continue;
+                let v1 = formData[item];
+                let itemDesc = this.windowsDesc[item];
+                if (v1.indexOf(" ") != -1) {
+                    errMsg2 = errMsg2 + itemDesc + " ";
+                };
+            };
+            if (errMsg2) {
+                errMsg2 = errMsg2 + "：所填写内容存在空格，在windows电脑上，可能会执行失败。是否继续进行签名操作？";
+                return await hxShowMessageBox("提醒", errMsg2, ['重新填写', '继续']).then(btn => {
+                    return btn == '继续' ? true : false;
+                });
+            };
+            return true;
+        };
+
         return true;
     };
 
@@ -98,8 +122,10 @@ class reSign {
      */
     getFormItems(change, formData) {
         const subtitle = '<span style="color: #a0a0a0; font-size: 11px;">jarsigner支持V1签名，apksigner支持v2签名。如果您不了解两者区别，建议选择使用jarsigner对apk进行签名。</span>'
-        const helper = '<p><a href="https://ext.dcloud.net.cn/plugin?name=app-certificate-tools">Android证书生成工具</a>、<a href="https://ext.dcloud.net.cn/plugin?name=android-apk-re-sign">寻求帮助</a></p>';
         const PlayTour= '<span style="color: #a0a0a0; font-size: 13px;">插件开发不易，请作者喝杯可乐吧 </span><a href="https://ext.dcloud.net.cn/plugin?name=android-apk-re-sign">打赏作者</a>';
+
+        const helper1 = '<p style="color: #a0a0a0; font-size: 11px;">1. 在windows电脑上，上述所填写的内容(Apk路径、证书等信息)，请勿包含空格。</p>'
+        const helper2 = '<p style="color: #a0a0a0; font-size: 11px;">2. 如没有Android证书，见：<a href="https://ext.dcloud.net.cn/plugin?name=android-apk-re-sign">Android证书自动生成工具</a></p>';
 
         let apkSourcePath = this.apkSourcePath ? this.apkSourcePath : "";
         let certPath = this.certInfo.certPath ? this.certInfo.certPath : '';
@@ -121,7 +147,8 @@ class reSign {
             {type: "fileSelectInput",mode: "file",name: "certPath",label: "Android证书文件",placeholder: '必填',value: certPath},
             {type: "input",name: "certPassphrase",label: "Android证书密码",placeholder: "必填",value: certPassphrase},
             {type: "input",name: "certAlias",label: "Android证书别名",placeholder: "必填",value: certAlias},
-            {type: "label",name: "text",text: helper }
+            {type: "label",name: "text1",text: helper1 },
+            {type: "label",name: "text2",text: helper2 }
         ];
         return {
             title: "Android Apk包签名",
