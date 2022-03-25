@@ -122,7 +122,7 @@ class reSign {
      */
     getFormItems(change, formData) {
         const subtitle = '<span style="color: #a0a0a0; font-size: 11px;">jarsigner支持V1签名，apksigner支持v2签名。如果您不了解两者区别，建议选择使用jarsigner对apk进行签名。</span>'
-        const PlayTour= '<span style="color: #a0a0a0; font-size: 13px;">插件开发不易，请作者喝杯可乐吧 </span><a href="https://ext.dcloud.net.cn/plugin?name=android-apk-re-sign">打赏作者</a>';
+        const PlayTour= '<span style="color: #a0a0a0; font-size: 13px;">插件开发不易，请作者喝杯可乐吧 </span><a href="https://ext.dcloud.net.cn/plugin?name=android-apk-re-sign">赞助</a>';
 
         const helper1 = '<p style="color: #a0a0a0; font-size: 11px;">1. 在windows电脑上，上述所填写的内容(Apk路径、证书等信息)，请勿包含空格。</p>'
         const helper2 = '<p style="color: #a0a0a0; font-size: 11px;">2. 如没有Android证书，见：<a href="https://ext.dcloud.net.cn/plugin?name=android-apk-re-sign">Android证书自动生成工具</a></p>';

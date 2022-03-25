@@ -2,7 +2,7 @@
     "id": "android-apk-re-sign",
     "name": "Android Apk包签名",
     "description": "Android Apk包签名",
-    "displayName": "Android Apk包签名",
+    "displayName": "Android Sign Apk",
     "version": "0.0.1",
     "publisher": "xiaohutu",
     "engines": {
@@ -34,7 +34,7 @@
         "commands": [
             {
                 "command": "AndroidApkSign.main",
-                "title": "Android Apk包签名"
+                "title": "%AndroidApkPackageSign%"
             }
         ],
         "expressions": {
@@ -65,7 +65,6 @@
                 },
                 {
                     "command": "AndroidApkSign.main",
-                    "title": "Android Apk包签名",
                     "group": "ext_settings"
                 },
                 {
